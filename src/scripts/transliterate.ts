@@ -1,4 +1,8 @@
-import { alphabetMap, specialInitChars, type TTranslitNode } from "./tables.ts";
+import {
+	alphabetMap,
+	specialInitChars,
+	type TTranslitNode,
+} from "../tables.ts";
 
 const SPECIAL_INIT_CHAR_KEYS = Object.keys(specialInitChars);
 const DIVIDER_CHARS = ["-", " ", "/", "(", '"', "“", "«", "–", "—"];

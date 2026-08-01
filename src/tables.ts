@@ -1,5 +1,7 @@
+import { combineFlatTables } from "./scripts/tables.ts";
+
 export type TTranslitNode = string | { [key: string]: TTranslitNode };
-type TTranslitTable = Record<string, TTranslitNode>;
+export type TTranslitTable = Record<string, TTranslitNode>;
 
 export const alphabetMap: TTranslitTable = {
 	a: {
@@ -90,3 +92,8 @@ export const specialInitChars: TTranslitTable = {
 		},
 	},
 };
+
+export const combinedFlatTables = combineFlatTables(
+	alphabetMap,
+	specialInitChars,
+);

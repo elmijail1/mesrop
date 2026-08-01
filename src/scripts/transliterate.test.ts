@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { alphabetMap, specialInitChars, type TTranslitNode } from "./tables";
-import { transliterate } from "./transliterate";
+import {
+	alphabetMap,
+	specialInitChars,
+	type TTranslitNode,
+} from "../tables.ts";
+import { transliterate } from "./transliterate.ts";
 
 type TCase = { input: string; expected: string };
 function flatten(node: TTranslitNode, prefix: string): TCase[] {
