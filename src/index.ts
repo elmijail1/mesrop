@@ -6,15 +6,19 @@ import { combinedFlatTables } from "./tables.ts";
 
 const cli = new Command()
 	.name("mesrop")
-	.description("Transliterate from the Latin script to Armenian")
-	.argument("[word]", "Text to transliterate")
-	.option("-t, --table", "Show the transliteration table")
-	.action((word, options) => {
+	.description("transliterate from the Latin script to Armenian")
+	.argument("[text]", "text in Latin")
+	.option("-t, --table", "show the transliteration table")
+	.action((text, options) => {
 		if (options.table) {
 			printTable(combinedFlatTables);
 			return;
 		}
-		console.log(transliterate(word));
+		if (!text) {
+			cli.help();
+			return;
+		}
+		console.log(transliterate(text));
 	});
 
 cli.parse();
