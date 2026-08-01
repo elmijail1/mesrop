@@ -15,7 +15,7 @@
 		"commander": "^15.0.0"
 	},
 	"bin": {
-		"mesrop": "./src/index.ts"
+		"mesrop": "./src/cli/index.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.6",
