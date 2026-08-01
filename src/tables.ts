@@ -77,17 +77,16 @@ export const alphabetMap: TTranslitTable = {
 
 export const specialInitChars: TTranslitTable = {
 	o: "օ",
-	e: {
-		e: "է",
-		eh: "է",
-	},
+	e: "է",
 	v: {
 		v: "վ",
 		vo: "ո",
 	},
 	y: {
 		y: "յ",
-		ye: "ե",
-		yev: "և",
+		ye: {
+			ye: "ե",
+			yev: "և",
+		},
 	},
 };

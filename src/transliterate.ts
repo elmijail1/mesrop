@@ -6,8 +6,10 @@ const DIVIDER_CHARS = ["-", " ", "/", "(", '"', "“", "«", "–", "—"];
 export function transliterate(sub: string): string {
 	const armSub: string[] = [];
 
-	for (let i = 0; i < sub.length; i++) {
-		const latCh = sub[i];
+	const trimmedSub = sub.trim();
+
+	for (let i = 0; i < trimmedSub.length; i++) {
+		const latCh = trimmedSub[i];
 		const latChLow = latCh.toLowerCase();
 		const isUpper = latCh !== latChLow;
 
@@ -16,9 +18,12 @@ export function transliterate(sub: string): string {
 			continue;
 		}
 
-		if (isInitChar(sub, i) && SPECIAL_INIT_CHAR_KEYS.includes(latChLow)) {
+		if (
+			isInitChar(trimmedSub, i) &&
+			SPECIAL_INIT_CHAR_KEYS.includes(latChLow)
+		) {
 			const entry = specialInitChars[latChLow];
-			const resEntry = resolveEntry(entry, latChLow, sub, i);
+			const resEntry = resolveEntry(entry, latChLow, trimmedSub, i, isUpper);
 			if (!resEntry) {
 				throw new Error("Match not found");
 			}
@@ -28,7 +33,7 @@ export function transliterate(sub: string): string {
 		}
 
 		const entry = alphabetMap[latChLow];
-		const resEntry = resolveEntry(entry, latChLow, sub, i);
+		const resEntry = resolveEntry(entry, latChLow, trimmedSub, i, isUpper);
 		if (!resEntry) {
 			throw new Error("Match not found");
 		}
@@ -44,6 +49,7 @@ function resolveEntry(
 	char: string,
 	sub: string,
 	ind: number,
+	isUpper: boolean,
 ): { value: string; length: number } | null {
 	if (typeof node === "string") {
 		return { value: node, length: char.length };
@@ -52,10 +58,17 @@ function resolveEntry(
 	// try to extend the match by one more char
 	const nextChar = sub[ind + 1]?.toLowerCase();
 	if (nextChar !== undefined) {
-		const candidateKey = char + nextChar;
+		const isSpecialCase = isUpper && char + nextChar === "yev";
+		const candidateKey = isSpecialCase ? char : char + nextChar;
 		const candidateNode = node[candidateKey];
 		if (candidateNode !== undefined) {
-			const deeper = resolveEntry(candidateNode, candidateKey, sub, ind + 1);
+			const deeper = resolveEntry(
+				candidateNode,
+				candidateKey,
+				sub,
+				ind + 1,
+				isUpper,
+			);
 			if (deeper) return deeper;
 		}
 	}
