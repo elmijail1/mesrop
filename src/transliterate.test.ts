@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { transliterate } from "./transliterate";
 import { alphabetMap, specialInitChars, type TTranslitNode } from "./tables";
+import { transliterate } from "./transliterate";
 
 type TCase = { input: string; expected: string };
 function flatten(node: TTranslitNode, prefix: string): TCase[] {
@@ -59,11 +59,11 @@ describe("transliterate", () => {
 	});
 
 	it("keeps characters absent in the dictionary intact", () => {
-		expect(transliterate("Beboп_ Ятагаn\!")).toBe("Բեբոп_ Ятагаն!");
+		expect(transliterate("Beboп_ Ятагаn!")).toBe("Բեբոп_ Ятагаն!");
 	});
 
 	it("handles divider characters properly", () => {
-		expect(transliterate("Beboп_ Ятагаn\!")).toBe("Բեբոп_ Ятагаն!");
+		expect(transliterate("Beboп_ Ятагаn!")).toBe("Բեբոп_ Ятагаն!");
 	});
 });
 
@@ -86,6 +86,7 @@ describe("tables", () => {
 			flatten(node, key),
 		);
 		it.each(cases)("transliterates initial $input", ({ input, expected }) =>
-			expect(transliterate(input)).toBe(expected));
+			expect(transliterate(input)).toBe(expected),
+		);
 	});
 });

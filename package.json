@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "vitest"
+		"test": "vitest",
+		"check": "biome check --write ."
 	},
 	"keywords": [],
 	"author": "",
@@ -17,6 +18,7 @@
 		"mesrop": "./src/index.ts"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.5.6",
 		"vitest": "^4.1.10"
 	}
 }
