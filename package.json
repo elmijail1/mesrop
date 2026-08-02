@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "vitest",
-		"check": "biome check --write ."
+		"check": "biome check --write .",
+		"bot": "node --env-file=.env --watch src/telegram-bot/index.ts"
 	},
 	"keywords": [],
 	"author": "",
