@@ -12,13 +12,15 @@
 	"license": "ISC",
 	"type": "module",
 	"dependencies": {
-		"commander": "^15.0.0"
+		"commander": "^15.0.0",
+		"grammy": "^1.45.1"
 	},
 	"bin": {
 		"mesrop": "./src/cli/index.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.6",
+		"@types/node": "^26.1.2",
 		"vitest": "^4.1.10"
 	}
 }
