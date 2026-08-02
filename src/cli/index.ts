@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { printTable } from "./scripts/tables.ts";
-import { transliterate } from "./scripts/transliterate.ts";
-import { combinedFlatTables } from "./tables.ts";
+import { transliterate } from "../shared/scripts/transliterate.ts";
+import { combinedFlatTables } from "../shared/tables.ts";
+import { printTable } from "./printTable.ts";
 
 const cli = new Command()
 	.name("mesrop")
