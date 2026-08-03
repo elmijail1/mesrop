@@ -1,4 +1,4 @@
-import type { TTranslitNode, TTranslitTable } from "../tables.ts";
+import type { TTranslitNode, TTranslitTable } from "../data/tables.ts";
 
 type TCombinedValue = string | { regular: string; init: string };
 export type TFlattenedMap = Record<string, TCombinedValue>;

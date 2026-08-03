@@ -1,4 +1,4 @@
-import { combineFlatTables } from "./scripts/flattenTable.ts";
+import { combineFlatTables } from "../scripts/flattenTable.ts";
 
 export type TTranslitNode = string | { [key: string]: TTranslitNode };
 export type TTranslitTable = Record<string, TTranslitNode>;
