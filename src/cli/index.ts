@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import { combinedFlatTables } from "../shared/data/tables.ts";
 import { transliterate } from "../shared/scripts/transliterate.ts";
-import { combinedFlatTables } from "../shared/tables.ts";
 import { printTable } from "./printTable.ts";
 
 const cli = new Command()
