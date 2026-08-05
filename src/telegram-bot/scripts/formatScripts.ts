@@ -2,9 +2,19 @@ import type { TFlattenedMap } from "../../shared/scripts/flattenTable.ts";
 
 export function formatTable(table: TFlattenedMap): string {
 	const lines = Object.entries(table).map(([lat, arm]) => {
-		const armenian =
-			typeof arm === "string" ? arm : `${arm.regular} / ${arm.init} (init.)`;
-		return `${lat.padEnd(6)} ${armenian}`;
+		let armFinal = arm;
+
+		if (typeof arm !== "string") {
+			if (arm.init && arm.regular && arm.init !== arm.regular) {
+				armFinal = `${arm.regular} / ${arm.init} (init.)`;
+			} else if (arm.init && arm.regular && arm.init === arm.regular) {
+				armFinal = arm.regular;
+			} else if (arm.init && !arm.regular) {
+				armFinal = `${arm.init} (only init.)`;
+			}
+		}
+
+		return `${lat.padEnd(6)} ${armFinal}`;
 	});
 	return `<b>How Latin & Armenian letters match</b>\n<pre>${lines.join("\n")}</pre>`;
 }
