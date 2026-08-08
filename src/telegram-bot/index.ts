@@ -15,7 +15,7 @@ const bot = new Bot<MyContext>(token);
 
 await bot.api.setMyCommands([
 	{ command: "table", description: "View the Latin-Armenian letter table" },
-	{ command: "practice", description: "Practice Armenian letters" },
+	{ command: "practice", description: "Learn to read Armenian letters" },
 	{ command: "help", description: "Show help" },
 ]);
 
@@ -36,7 +36,7 @@ bot.command("practice", async (ctx) => {
 	await ctx.conversation.enter("lessonConversation", lessonId);
 });
 
-bot.command("help", async (ctx) => {
+bot.command(["help", "start"], async (ctx) => {
 	await ctx.reply(formatHelp(), { parse_mode: "HTML" });
 });
 
