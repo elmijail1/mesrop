@@ -21,10 +21,14 @@ export function formatTable(table: TFlattenedMap): string {
 
 export function formatHelp(): string {
 	return [
-		"<b>Mesrop – Turn Latin text to Armenian</b>",
-		"This is a transliterator that turns your text in Latin letters to Armenian letters",
+		"<b>🇦🇲 Mesrop – Turn Latin text to Armenian</b>",
+		"This bot turns your text in Latin letters to Armenian letters:",
+		'- Type text in Latin letters: for example, "koko"',
+		'- Get the same text in Armenian letters: "koko" → "կոկո"',
+		"- You don't need any command to do that – just send your text as a regular message",
 		"",
-		"<b>Commands</b>",
+		"<b>ℹ️ Extra Commands</b>",
+		"/practice – learn to read and write Armenian letters",
 		"/table - view a table that shows how Latin and Armenian letters match",
 		"/help – show help",
 	].join("\n");
