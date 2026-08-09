@@ -1,14 +1,18 @@
 import type { Conversation } from "@grammyjs/conversations";
 import type { Context } from "grammy";
-import { lessons, type TLesson } from "../../shared/data/lessons.ts";
 import {
-	questions,
-	type TDifficulty,
-	type TQuestion,
-} from "../../shared/data/questions.ts";
+	MAX_QUESTIONS_DEFAULT,
+	PHRASE_LENGTH_DEFAULT,
+	WORD_LENGTH_DEFAULT,
+} from "../../shared/configs/lessons.ts";
+import {
+	lessons,
+	type TLesson,
+	type TLessonCharacters,
+	type TLessonDifficulty,
+} from "../../shared/data/lessons.ts";
+import { transliterate } from "../../shared/scripts/transliterate.ts";
 import type { MyContext } from "../context.ts";
-
-const MAX_QUESTIONS_DEFAULT = 10;
 
 export async function lessonConversation(
 	conversation: Conversation<MyContext>,
@@ -16,12 +20,18 @@ export async function lessonConversation(
 	lessonId: string,
 ) {
 	const lesson = getLesson(lessonId); // first do it with static data, later make a DB query // TODO: change to a DB call once lesson data is moved there
-	await ctx.reply(lesson.introText, { parse_mode: "HTML" });
+	const preparedIntroText = lesson.introTextRows.join("\n");
+	await ctx.reply(preparedIntroText, { parse_mode: "HTML" });
 	let correct = 0;
-	const relevantQuestions = questions.filter((q) => q.lessonId === lessonId);
+
 	for (let i = 0; i < MAX_QUESTIONS_DEFAULT; i++) {
-		const question = await pickQuestion(conversation, relevantQuestions, i);
-		await ctx.reply(`${i + 1}/${MAX_QUESTIONS_DEFAULT}. ${question.prompt}`);
+		const question = await generateQuestion(
+			conversation,
+			lesson.characters,
+			i,
+			lesson.difficulty,
+		);
+		await ctx.reply(`${i + 1}/${MAX_QUESTIONS_DEFAULT}. ${question}`);
 		const answerCtx = await conversation.waitFor("message:text");
 		if (answerCtx.hasCommand("end")) {
 			await answerCtx.reply(
@@ -29,13 +39,11 @@ export async function lessonConversation(
 			);
 			return;
 		}
-		const isCorrect = answerCtx.message.text === question.expected;
+		const userResponse = answerCtx.message.text;
+		const isCorrect = transliterate(userResponse) === question;
 		if (isCorrect) correct++;
-		await answerCtx.reply(
-			isCorrect
-				? `✅ Correct!${question.tip ? `\n${question.tip}` : ""}`
-				: `😭 Incorrect — it's ${question.expected}!${question.tip && `\n${question.tip}`}`,
-		);
+		// TODO: show the correct value for the incorrect response – you'll need an Armenian-first table for that
+		await answerCtx.reply(isCorrect ? "✅ Correct!" : "😭 Incorrect!");
 	}
 	await ctx.reply(
 		[
@@ -54,19 +62,97 @@ function getLesson(id: string): TLesson {
 	return lesson;
 }
 
-async function pickQuestion(
+async function generateQuestion(
 	conversation: Conversation<MyContext>,
-	questions: TQuestion[],
+	chars: TLessonCharacters,
 	index: number,
-): Promise<TQuestion> {
-	let difficulty: TDifficulty = "low";
-	if (index > 2) difficulty = "medium";
-	if (index > 6) difficulty = "high";
-	const filteredQuestions = questions.filter(
-		(q) => q.difficulty === difficulty,
+	difficulty: TLessonDifficulty,
+): Promise<string> {
+	if (index < difficulty.low) {
+		const allChars = [...chars.consonants, ...chars.vowels];
+		const randNum = await conversation.random();
+		const randomChar = getRandomChar(allChars, randNum);
+		const shouldBeUpper = await determineIfUpper(conversation);
+		return shouldBeUpper ? randomChar.toUpperCase() : randomChar;
+	} else if (index < difficulty.low + difficulty.normal) {
+		return await generateWord(conversation, chars);
+	} else {
+		return await generatePhrase(conversation, chars);
+	}
+}
+
+async function determineIfUpper(conversation: Conversation<MyContext>) {
+	const rand = await conversation.random();
+	return Boolean(Math.floor(rand * 2));
+}
+
+function getRandomChar(letters: string[], random: number): string {
+	return letters[Math.floor(random * letters.length)];
+}
+
+async function generateWord(
+	conversation: Conversation<MyContext>,
+	chars: TLessonCharacters,
+	wordIndex?: number,
+) {
+	const randNum = await conversation.random();
+	const wordLength = getRandomLength(
+		randNum,
+		WORD_LENGTH_DEFAULT.MAX,
+		WORD_LENGTH_DEFAULT.MIN,
 	);
-	const randomNum = await conversation.random();
-	return filteredQuestions[Math.floor(randomNum * filteredQuestions.length)];
+	const wordChars: string[] = [];
+	let prev: "none" | "con" | "vow" = "none";
+	for (let i = 0; i < wordLength; i++) {
+		const randNum = await conversation.random();
+		if (i === 0 && (wordIndex === undefined || wordIndex === 0)) {
+			const allLetters = [...chars.consonants, ...chars.vowels];
+			const char = getRandomChar(allLetters, randNum);
+			wordChars.push(char.toUpperCase());
+			if (chars.consonants.includes(char)) {
+				prev = "con";
+			} else {
+				prev = "vow";
+			}
+			continue;
+		}
+		if (prev === "con") {
+			const char = getRandomChar(chars.vowels, randNum);
+			wordChars.push(char);
+			prev = "vow";
+		} else {
+			const char = getRandomChar(chars.consonants, randNum);
+			wordChars.push(char);
+			prev = "con";
+		}
+	}
+	return wordChars.join("");
+}
+
+async function generatePhrase(
+	conversation: Conversation<MyContext>,
+	chars: TLessonCharacters,
+) {
+	const randNum = await conversation.random();
+	const phraseLength = getRandomLength(
+		randNum,
+		PHRASE_LENGTH_DEFAULT.MAX,
+		PHRASE_LENGTH_DEFAULT.MIN,
+	);
+	const phrase: string[] = [];
+	for (let i = 0; i < phraseLength; i++) {
+		const word = await generateWord(conversation, chars, i);
+		phrase.push(word);
+	}
+	return phrase.join(" ");
+}
+
+function getRandomLength(
+	randNum: number,
+	maxVal: number,
+	minVal: number,
+): number {
+	return Math.floor(randNum * (maxVal - minVal + 1)) + minVal;
 }
 
 function determineResultMessage(correct: number, questionsNumber: number) {
