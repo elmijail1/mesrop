@@ -2,14 +2,37 @@ export type TLesson = {
 	id: string;
 	order: number;
 	name: string;
+	characters: TLessonCharacters;
+	// TODO: Zod schema must add up the difficulty numbers and make sure the total doesn't exceed 10 (make this 10 a global config!)
+	difficulty: TLessonDifficulty;
 	introText: string;
+};
+
+export type TLessonCharacters = {
+	vowels: string[];
+	consonants: string[];
+};
+
+export type TLessonDifficulty = {
+	low: number;
+	normal: number;
+	high: number;
 };
 
 export const lessons: TLesson[] = [
 	{
 		id: "1",
-		order: 1,
-		name: "ԱՍՄ",
+		order: 10,
+		name: "Ա Ս Մ",
+		characters: {
+			vowels: ["ա"],
+			consonants: ["ս", "մ"],
+		},
+		difficulty: {
+			low: 3,
+			normal: 4,
+			high: 3,
+		},
 		introText: [
 			"In the first lesson we'll practice three letters:",
 			`- <b>Աա</b> = Aa. Pronounced as "u" in "bus"`,
