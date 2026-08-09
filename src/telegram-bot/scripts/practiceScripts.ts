@@ -20,7 +20,8 @@ export async function lessonConversation(
 	lessonId: string,
 ) {
 	const lesson = getLesson(lessonId); // first do it with static data, later make a DB query // TODO: change to a DB call once lesson data is moved there
-	await ctx.reply(lesson.introText, { parse_mode: "HTML" });
+	const preparedIntroText = lesson.introTextRows.join("\n");
+	await ctx.reply(preparedIntroText, { parse_mode: "HTML" });
 	let correct = 0;
 
 	for (let i = 0; i < MAX_QUESTIONS_DEFAULT; i++) {
