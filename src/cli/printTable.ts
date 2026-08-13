@@ -1,4 +1,4 @@
-import type { TFlattenedMap } from "../shared/scripts/tables.ts";
+import type { TFlattenedMap } from "../shared/scripts/tableTransforms.ts";
 
 export function printTable(flatTable: TFlattenedMap): void {
 	const entries = Object.entries(flatTable);

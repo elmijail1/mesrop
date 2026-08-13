@@ -112,26 +112,39 @@ export function transliterateFromArmenian(sub: string): string {
 			continue;
 		}
 
+		// the notorious ու case (the only Armenian-first digraph requires special treatment)
+		const charCombo = (trimmedSub[i] + trimmedSub[i + 1]).toLowerCase();
+		if (charCombo === "ու") {
+			matchAndPushLatChar(alphabetMapArmenianFirst, charCombo, latSub, isUpper);
+			i++;
+			continue;
+		}
+
 		if (
 			isInitChar(trimmedSub, i) &&
 			SPECIAL_INIT_CHAR_KEYS_ARM.includes(armChLow)
 		) {
-			const entry = specialInitCharsArmenianFirst[armChLow];
-			const finalEntry = typeof entry === "string" ? entry : entry[0];
-			if (!finalEntry) {
-				throw new Error("Match not found");
-			}
-			latSub.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
+			matchAndPushLatChar(
+				specialInitCharsArmenianFirst,
+				armChLow,
+				latSub,
+				isUpper,
+			);
 			continue;
 		}
-
-		const entry = alphabetMapArmenianFirst[armChLow];
-		const finalEntry = typeof entry === "string" ? entry : entry[0];
-		if (!finalEntry) {
-			throw new Error("Match not found");
-		}
-		latSub.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
+		matchAndPushLatChar(alphabetMapArmenianFirst, armChLow, latSub, isUpper);
 	}
 
 	return latSub.join("");
+}
+
+function matchAndPushLatChar(
+	map: Record<string, string | string[]>,
+	currentChar: string,
+	resultArray: string[],
+	isUpper: boolean,
+) {
+	const entry = map[currentChar];
+	const finalEntry = typeof entry === "string" ? entry : entry[0];
+	resultArray.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
 }

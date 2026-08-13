@@ -1,4 +1,4 @@
-import { combineFlatTables, invertTable } from "../scripts/tables.ts";
+import { combineFlatTables, invertTable } from "../scripts/tableTransforms.ts";
 import { alphabetMap, specialInitChars } from "./tables.ts";
 
 export const combinedFlatTables = combineFlatTables(
