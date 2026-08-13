@@ -41,3 +41,28 @@ export function combineFlatTables(
 	);
 	return Object.fromEntries(sortedEntries);
 }
+
+export function invertTable(
+	array: [string, TTranslitNode][],
+	objectAcc?: Record<string, string | string[]>,
+): Record<string, string | string[]> {
+	const finalObj: Record<string, string | string[]> = objectAcc
+		? objectAcc
+		: {};
+	for (let i = 0; i < array.length; i++) {
+		const entry = array[i];
+		if (typeof entry[1] === "string") {
+			const val = entry[1];
+			if (!finalObj[val]) {
+				finalObj[val] = entry[0];
+			} else if (typeof finalObj[val] === "string") {
+				finalObj[val] = [finalObj[val], entry[0]];
+			} else {
+				finalObj[val].push(entry[0]);
+			}
+		} else {
+			invertTable(Object.entries(entry[1]), finalObj);
+		}
+	}
+	return finalObj;
+}
