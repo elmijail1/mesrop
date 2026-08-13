@@ -11,7 +11,10 @@ import {
 	type TLessonCharacters,
 	type TLessonDifficulty,
 } from "../../shared/data/lessons.ts";
-import { transliterate } from "../../shared/scripts/transliterate.ts";
+import {
+	transliterate,
+	transliterateFromArmenian,
+} from "../../shared/scripts/transliterate.ts";
 import type { MyContext } from "../context.ts";
 
 export async function lessonConversation(
@@ -43,7 +46,11 @@ export async function lessonConversation(
 		const isCorrect = transliterate(userResponse) === question;
 		if (isCorrect) correct++;
 		// TODO: show the correct value for the incorrect response – you'll need an Armenian-first table for that
-		await answerCtx.reply(isCorrect ? "✅ Correct!" : "😭 Incorrect!");
+		await answerCtx.reply(
+			isCorrect
+				? "✅ Correct!"
+				: `😭 Incorrect! It must be "${transliterateFromArmenian(question)}".`,
+		);
 	}
 	await ctx.reply(
 		[
