@@ -1,4 +1,4 @@
-import type { TFlattenedMap } from "../../shared/scripts/flattenTable.ts";
+import type { TFlattenedMap } from "../../shared/scripts/tables.ts";
 
 export function formatTable(table: TFlattenedMap): string {
 	const lines = Object.entries(table).map(([lat, arm]) => {

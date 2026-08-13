@@ -3,8 +3,13 @@ import {
 	specialInitChars,
 	type TTranslitNode,
 } from "../data/tables.ts";
+import {
+	alphabetMapArmenianFirst,
+	specialInitCharsArmenianFirst,
+} from "../data/tablesComputed.ts";
 
 const SPECIAL_INIT_CHAR_KEYS = Object.keys(specialInitChars);
+const SPECIAL_INIT_CHAR_KEYS_ARM = Object.keys(specialInitCharsArmenianFirst);
 const DIVIDER_CHARS = ["-", " ", "/", "(", '"', "“", "«", "–", "—"];
 
 export function transliterate(sub: string): string {
@@ -91,4 +96,42 @@ function isInitChar(sub: string, ind: number): boolean {
 		return true;
 	}
 	return false;
+}
+
+export function transliterateFromArmenian(sub: string): string {
+	const latSub: string[] = [];
+	const trimmedSub = sub.trim();
+
+	for (let i = 0; i < trimmedSub.length; i++) {
+		const armCh = trimmedSub[i];
+		const armChLow = armCh.toLowerCase();
+		const isUpper = armCh !== armChLow;
+
+		if (!alphabetMapArmenianFirst[armChLow]) {
+			latSub.push(armCh);
+			continue;
+		}
+
+		if (
+			isInitChar(trimmedSub, i) &&
+			SPECIAL_INIT_CHAR_KEYS_ARM.includes(armChLow)
+		) {
+			const entry = specialInitCharsArmenianFirst[armChLow];
+			const finalEntry = typeof entry === "string" ? entry : entry[0];
+			if (!finalEntry) {
+				throw new Error("Match not found");
+			}
+			latSub.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
+			continue;
+		}
+
+		const entry = alphabetMapArmenianFirst[armChLow];
+		const finalEntry = typeof entry === "string" ? entry : entry[0];
+		if (!finalEntry) {
+			throw new Error("Match not found");
+		}
+		latSub.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
+	}
+
+	return latSub.join("");
 }
