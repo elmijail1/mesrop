@@ -3,7 +3,7 @@ import {
 	alphabetMap,
 	specialInitChars,
 	type TTranslitNode,
-} from "../data/tables.ts";
+} from "../../data/tables.ts";
 import { transliterate } from "./transliterate.ts";
 
 type TCase = { input: string; expected: string };

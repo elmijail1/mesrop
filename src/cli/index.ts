@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
-import { transliterate } from "../shared/scripts/transliterate.ts";
+import { transliterate } from "../shared/scripts/transliterate/transliterate.ts";
 import { printTable } from "./printTable.ts";
 import { runInteractive } from "./runInteractive.ts";
 

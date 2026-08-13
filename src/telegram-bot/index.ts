@@ -2,7 +2,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import { Bot, InlineKeyboard, session } from "grammy";
 import { lessons } from "../shared/data/lessons.ts";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
-import { transliterate } from "../shared/scripts/transliterate.ts";
+import { transliterate } from "../shared/scripts/transliterate/transliterate.ts";
 import type { MyContext } from "./context.ts";
 import { formatHelp, formatTable } from "./scripts/formatScripts.ts";
 import { lessonConversation } from "./scripts/practiceScripts.ts";

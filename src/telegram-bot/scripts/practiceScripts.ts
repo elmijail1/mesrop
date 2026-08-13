@@ -11,10 +11,8 @@ import {
 	type TLessonCharacters,
 	type TLessonDifficulty,
 } from "../../shared/data/lessons.ts";
-import {
-	transliterate,
-	transliterateFromArmenian,
-} from "../../shared/scripts/transliterate.ts";
+import { transliterate } from "../../shared/scripts/transliterate/transliterate.ts";
+import { transliterateFromArm } from "../../shared/scripts/transliterate/transliterateFromArm.ts";
 import type { MyContext } from "../context.ts";
 
 export async function lessonConversation(
@@ -49,7 +47,7 @@ export async function lessonConversation(
 		await answerCtx.reply(
 			isCorrect
 				? "✅ Correct!"
-				: `😭 Incorrect! It must be "${transliterateFromArmenian(question)}".`,
+				: `😭 Incorrect! It must be "${transliterateFromArm(question)}".`,
 		);
 	}
 	await ctx.reply(

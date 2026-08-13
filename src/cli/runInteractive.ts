@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline";
-import { transliterate } from "../shared/scripts/transliterate.ts";
+import { transliterate } from "../shared/scripts/transliterate/transliterate.ts";
 
 export function runInteractive(): void {
 	const rl = createInterface({
