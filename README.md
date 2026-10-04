@@ -54,7 +54,10 @@ You can run the "mesrop" command in your Terminal and transliterate text right t
 2. Run `npm install` for the local version of this repo
 3. Run `npm link` to make the "mesrop" command available globally
 
-If you don't want to link, you can just run the command directly, e.g.: `node src/cli/index.ts "barev"`.
+If you don't want to link, you can just run the command directly, e.g.: `node src/cli/index.ts "barev"`. You can run it in the interactive mode with the -i flag. You can also view the table of letters with -t and help with commands with -h.
+
+The CLI supports both directions: Latin characters to Armenian and Armenian characters to Latin.
+
 
 ## 🤔 More about the app
 ### Transliteration?
