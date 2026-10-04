@@ -1,5 +1,6 @@
 import { createInterface } from "node:readline";
-import { transliterate } from "../shared/scripts/transliterate/transliterate.ts";
+import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
+import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
 
 export function runInteractive(): void {
 	const rl = createInterface({
@@ -23,7 +24,12 @@ export function runInteractive(): void {
 			rl.prompt();
 			return;
 		}
-		console.log(transliterate(trimmed));
+		const result = handleTransliteration(trimmed);
+		if (!result.ok) {
+			console.error(ERROR_MESSAGE_UNKNOWN_SCRIPT);
+		} else {
+			console.log(result.text);
+		}
 		rl.prompt();
 	});
 

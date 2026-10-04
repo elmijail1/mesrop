@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
 import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
+import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
 import { printTable } from "./printTable.ts";
 import { runInteractive } from "./runInteractive.ts";
 
@@ -26,9 +27,7 @@ const cli = new Command()
 		}
 		const result = handleTransliteration(text);
 		if (!result.ok) {
-			console.error(
-				"Try entering a text written with either Latin or Armenian characters.",
-			);
+			console.error(ERROR_MESSAGE_UNKNOWN_SCRIPT);
 			process.exitCode = 1;
 			return;
 		}
