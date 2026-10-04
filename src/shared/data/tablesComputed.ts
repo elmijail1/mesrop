@@ -6,9 +6,11 @@ export const combinedFlatTables = combineFlatTables(
 	specialInitChars,
 );
 
-export const alphabetMapArmenianFirst = invertTable(
-	Object.entries(alphabetMap),
-);
+export const alphabetMapArmenianFirst = {
+	...invertTable(Object.entries(specialInitChars)),
+	...invertTable(Object.entries(alphabetMap)),
+};
+
 export const specialInitCharsArmenianFirst = invertTable(
 	Object.entries(specialInitChars),
 );
