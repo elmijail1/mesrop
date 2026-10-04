@@ -7,7 +7,8 @@ export type TTranslitResult =
 	| { ok: false; reason: "no-supported-script" };
 
 // a letter (\p{L}) that is also Latin or Armenian – skips digits, punctuation (incl. Armenian one) and other scripts
-const FIRST_SUPPORTED_LETTER = /(?=\p{L})[\p{Script=Latin}\p{Script=Armenian}]/u;
+const FIRST_SUPPORTED_LETTER =
+	/(?=\p{L})[\p{Script=Latin}\p{Script=Armenian}]/u;
 const ARMENIAN_SCRIPT = /\p{Script=Armenian}/u;
 
 export function detectScript(text: string): TScript | null {

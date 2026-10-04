@@ -6,33 +6,33 @@ import { printTable } from "./printTable.ts";
 import { runInteractive } from "./runInteractive.ts";
 
 const cli = new Command()
-  .name("mesrop")
-  .description("transliterate from the Latin script to Armenian")
-  .argument("[text]", "text in Latin")
-  .option("-t, --table", "show the transliteration table")
-  .option("-i, --interactive", "start an interactive transliteration session")
-  .action((text, options) => {
-    if (options.interactive) {
-      runInteractive();
-      return;
-    }
-    if (options.table) {
-      printTable(combinedFlatTables);
-      return;
-    }
-    if (!text) {
-      cli.help();
-      return;
-    }
-    const result = handleTransliteration(text);
-    if (!result.ok) {
-      console.error(
-        "Try entering a text written with either Latin or Armenian characters.",
-      );
-      process.exitCode = 1;
-      return;
-    }
-    console.log(result.text);
-  });
+	.name("mesrop")
+	.description("transliterate from the Latin script to Armenian")
+	.argument("[text]", "text in Latin")
+	.option("-t, --table", "show the transliteration table")
+	.option("-i, --interactive", "start an interactive transliteration session")
+	.action((text, options) => {
+		if (options.interactive) {
+			runInteractive();
+			return;
+		}
+		if (options.table) {
+			printTable(combinedFlatTables);
+			return;
+		}
+		if (!text) {
+			cli.help();
+			return;
+		}
+		const result = handleTransliteration(text);
+		if (!result.ok) {
+			console.error(
+				"Try entering a text written with either Latin or Armenian characters.",
+			);
+			process.exitCode = 1;
+			return;
+		}
+		console.log(result.text);
+	});
 
 cli.parse();
