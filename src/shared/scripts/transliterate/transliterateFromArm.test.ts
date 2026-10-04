@@ -23,6 +23,7 @@ describe("transliterateFromArm", () => {
 		expect(transliterateFromArm("Եղիշե Չարենց")).toBe("Yeghishe Ch'arenc'");
 		expect(transliterateFromArm("եղիՇե չարենՑ")).toBe("yeghiShe ch'arenC'");
 		expect(transliterateFromArm("Շուն Ճաշ Ժամ")).toBe("Shun Chash Zham");
+		expect(transliterateFromArm("ՃՈՊ ՇՈՒՆ ՉԱՐԵՆՑ")).toBe("ChOP ShUN Ch'ARENC'");
 	});
 
 	it("handles special initial letters correctly", () => {

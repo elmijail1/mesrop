@@ -38,6 +38,11 @@ describe("transliterate", () => {
 		expect(transliterate("yEghiShe cH'arenTs'")).toBe("եղիՇե չարենՑ");
 	});
 
+	it("keeps the upper case only for the first letter of a multi-letter output", () => {
+		expect(transliterate("Ur Uzum")).toBe("Ուր Ուզում");
+		expect(transliterate("UR UZUM")).toBe("ՈւՐ ՈւԶՈւՄ");
+	});
+
 	it("handles special initial letters correctly", () => {
 		expect(
 			transliterate("Opop Ekek Ehsehk Vorvon Vervu Yuzyu Yerye Yevyev"),

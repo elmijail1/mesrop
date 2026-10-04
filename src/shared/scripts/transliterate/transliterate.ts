@@ -4,7 +4,7 @@ import {
 	type TTranslitNode,
 	type TTranslitTable,
 } from "../../data/tables.ts";
-import { isInitChar } from "./utils.ts";
+import { capitalize, isInitChar } from "./utils.ts";
 
 const SPECIAL_INIT_CHAR_KEYS = Object.keys(specialInitChars);
 
@@ -61,7 +61,7 @@ function matchAndPushArmChar(
 	if (!resEntry) {
 		throw new Error("Match not found");
 	}
-	finalArr.push(isUpper ? resEntry.value.toUpperCase() : resEntry.value);
+	finalArr.push(isUpper ? capitalize(resEntry.value) : resEntry.value);
 	return resEntry;
 }
 

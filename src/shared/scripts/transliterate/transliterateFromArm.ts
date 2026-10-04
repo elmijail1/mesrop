@@ -2,7 +2,7 @@ import {
 	alphabetMapArmenianFirst,
 	specialInitCharsArmenianFirst,
 } from "../../data/tablesComputed.ts";
-import { isInitChar } from "./utils.ts";
+import { capitalize, isInitChar } from "./utils.ts";
 
 const SPECIAL_INIT_CHAR_KEYS_ARM = Object.keys(specialInitCharsArmenianFirst);
 
@@ -54,5 +54,5 @@ function matchAndPushLatChar(
 ): void {
 	const entry = map[currentChar];
 	const finalEntry = typeof entry === "string" ? entry : entry[0];
-	resultArray.push(isUpper ? finalEntry.toUpperCase() : finalEntry);
+	resultArray.push(isUpper ? capitalize(finalEntry) : finalEntry);
 }
