@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
 import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
 import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
+import { printResult } from "./printResult.ts";
 import { printTable } from "./printTable.ts";
 import { runInteractive } from "./runInteractive.ts";
 
@@ -31,7 +32,7 @@ const cli = new Command()
 			process.exitCode = 1;
 			return;
 		}
-		console.log(result.text);
+		printResult(result);
 	});
 
 cli.parse();
