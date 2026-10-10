@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { MAX_INPUT_LENGTH } from "../../configs/transliteration.ts";
 import { handleTransliteration } from "./handleTransliteration.ts";
 import { transliterate } from "./transliterate.ts";
 import { transliterateFromArm } from "./transliterateFromArm.ts";
+import { clipText } from "./utils.ts";
 
 function expectArmLat(input: string) {
 	expect(handleTransliteration(input)).toEqual({
@@ -41,6 +43,16 @@ describe("handleTransliteration", () => {
 			expectLatArm(input);
 		},
 	);
+
+	it("transliterates only the clipped input when it exceeds the limit and marks it as truncated", () => {
+		const input = "a".repeat(MAX_INPUT_LENGTH * 2);
+		expect(handleTransliteration(input)).toEqual({
+			ok: true,
+			direction: "lat-arm",
+			text: transliterate(clipText(input, MAX_INPUT_LENGTH)),
+			truncated: true,
+		});
+	});
 
 	it.each(["", "...!? 123", "абв где", "։՝"])(
 		"returns a non-ok result for %j",
