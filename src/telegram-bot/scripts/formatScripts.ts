@@ -1,4 +1,13 @@
 import type { TFlattenedMap } from "../../shared/scripts/tableTransforms.ts";
+import type { TTranslitSuccess } from "../../shared/scripts/transliterate/handleTransliteration.ts";
+import { WARNING_MESSAGE_TRUNCATED } from "../messages.ts";
+
+export function formatTransliteration(result: TTranslitSuccess): string {
+	if (result.truncated) {
+		return `${result.text}…\n\n${WARNING_MESSAGE_TRUNCATED}`;
+	}
+	return result.text;
+}
 
 export function formatTable(table: TFlattenedMap): string {
 	const lines = Object.entries(table).map(([lat, arm]) => {

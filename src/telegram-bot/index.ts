@@ -2,9 +2,14 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import { Bot, InlineKeyboard, session } from "grammy";
 import { lessons } from "../shared/data/lessons.ts";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
-import { transliterate } from "../shared/scripts/transliterate/transliterate.ts";
+import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
 import type { MyContext } from "./context.ts";
-import { formatHelp, formatTable } from "./scripts/formatScripts.ts";
+import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
+import {
+	formatHelp,
+	formatTable,
+	formatTransliteration,
+} from "./scripts/formatScripts.ts";
 import { lessonConversation } from "./scripts/practiceScripts.ts";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -56,7 +61,12 @@ bot.callbackQuery(/^practice:(.+)/, async (ctx) => {
 });
 
 bot.on("message:text", async (ctx) => {
-	await ctx.reply(transliterate(ctx.message.text));
+	const result = handleTransliteration(ctx.message.text);
+	if (!result.ok) {
+		await ctx.reply(ERROR_MESSAGE_UNKNOWN_SCRIPT);
+		return;
+	}
+	await ctx.reply(formatTransliteration(result));
 });
 
 bot.start();
