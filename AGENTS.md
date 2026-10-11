@@ -21,4 +21,5 @@ Latin ⇄ Armenian transliteration with two interfaces: a CLI and a Telegram bot
 - After every code change:
   1. Run `npm run check`, so formatting never ends up in a separate commit.
   2. Run the tests covering the changed logic (`npx vitest related --run <changed files>`).
+     - `vitest related` can't see `src/cli/cli.test.ts`, because it runs the CLI as a separate process instead of importing it. After CLI changes, run it explicitly: `npx vitest run src/cli/cli.test.ts`.
 - Don't add or update tests on your own. If tests fail, or behaviour they cover has changed, report it and say which tests may need an update.

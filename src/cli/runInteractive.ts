@@ -11,7 +11,7 @@ export function runInteractive(): void {
 	});
 
 	console.log(
-		"Interactive mode. Type text to transliterate. To quit type /q or /quit.",
+		"Interactive mode. Type Latin or Armenian text to transliterate. To quit type /q or /quit.",
 	);
 	rl.prompt();
 
