@@ -54,8 +54,8 @@ export async function lessonConversation(
 			`${determineResultMessage(correct, MAX_QUESTIONS_DEFAULT)}`,
 			`You got ${correct}/${MAX_QUESTIONS_DEFAULT} right.`,
 			"",
-			"Want another quiz? Run /practice again",
-			"Just want to turn Latin letters into Armenian? Simply start messaging",
+			"Want another quiz? Run /practice again.",
+			"Just want to transliterate a text? Simply send it in Latin or Armenian letters.",
 		].join("\n"),
 	);
 }
