@@ -3,7 +3,7 @@ import { createBot } from "../bot.ts";
 
 // create a fake bot
 const bot = createBot("123:fake", {
-    botInfo: {
+	botInfo: {
 		id: 1,
 		is_bot: true,
 		first_name: "Test",
@@ -13,12 +13,12 @@ const bot = createBot("123:fake", {
 		supports_inline_queries: false,
 		can_connect_to_business: false,
 		has_main_web_app: false,
-        has_topics_enabled: false,
-        allows_users_to_create_topics: false,
-        can_manage_bots: false,
-        supports_join_request_queries: false
-    },
-})
+		has_topics_enabled: false,
+		allows_users_to_create_topics: false,
+		can_manage_bots: false,
+		supports_join_request_queries: false,
+	},
+});
 
 // intercept every API call, print it, and return a fake OK instead of connecting Telegram
 bot.api.config.use(async (_prev, method, payload) => {
@@ -38,7 +38,13 @@ function message(text: string) {
 			from: { id: 1, is_bot: false, first_name: "User" },
 			text,
 			...(isCommand && {
-				entities: [{ type: "bot_command" as const, offset: 0, length: text.split(" ")[0].length }],
+				entities: [
+					{
+						type: "bot_command" as const,
+						offset: 0,
+						length: text.split(" ")[0].length,
+					},
+				],
 			}),
 		},
 	};
