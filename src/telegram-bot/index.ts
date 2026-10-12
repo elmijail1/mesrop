@@ -3,6 +3,7 @@ import { Bot, InlineKeyboard, session } from "grammy";
 import { lessons } from "../shared/data/lessons.ts";
 import { combinedFlatTables } from "../shared/data/tablesComputed.ts";
 import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
+import { BOT_COMMANDS } from "./commands.ts";
 import type { MyContext } from "./context.ts";
 import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
 import {
@@ -18,11 +19,7 @@ if (!token) {
 }
 const bot = new Bot<MyContext>(token);
 
-await bot.api.setMyCommands([
-	{ command: "table", description: "View the Latin-Armenian letter table" },
-	{ command: "practice", description: "Learn to read Armenian letters" },
-	{ command: "help", description: "Show help" },
-]);
+await bot.api.setMyCommands(BOT_COMMANDS);
 
 bot.use(session({ initial: () => ({}) }));
 bot.use(conversations());

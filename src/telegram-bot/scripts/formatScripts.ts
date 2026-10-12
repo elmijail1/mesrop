@@ -1,6 +1,7 @@
 import { MAX_INPUT_LENGTH } from "../../shared/configs/transliteration.ts";
 import type { TFlattenedMap } from "../../shared/scripts/tableTransforms.ts";
 import type { TTranslitSuccess } from "../../shared/scripts/transliterate/handleTransliteration.ts";
+import { BOT_COMMANDS } from "../commands.ts";
 import { WARNING_MESSAGE_TRUNCATED } from "../messages.ts";
 
 export function formatTransliteration(result: TTranslitSuccess): string {
@@ -39,8 +40,6 @@ export function formatHelp(): string {
 		`- Up to ${MAX_INPUT_LENGTH} characters per message`,
 		"",
 		"<b>ℹ️ Extra Commands</b>",
-		"/practice – learn to read and write Armenian letters",
-		"/table – view a table that shows how Latin and Armenian letters match",
-		"/help – show help",
+		...BOT_COMMANDS.map((c) => `- /${c.command} – ${c.description}`),
 	].join("\n");
 }
