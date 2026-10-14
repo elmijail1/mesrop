@@ -42,6 +42,7 @@ The app has multiple interfaces:
 
 ### 🤖 Telegram bot
 *Currently not always running! Want to test it? Let me know, I'll run the server for you*
+
 Bot name: @mesrop_translit_bot
 
 The bot can turn Latin text to Armenian: just start it and send your input – it'll respond with the same text in Armenian. Just start the bot (/start) and start sending text written in Latin characters – the bot will send you back the same text written in Armenian characters.
