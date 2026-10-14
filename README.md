@@ -36,12 +36,13 @@ If you want to type in Armenian but your physical keyboard doesn't have Armenian
 
 The app has multiple interfaces:
 
-1. Telegram bot
+1. Telegram bot (@mesrop_translit_bot)
 2. CLI (Terminal commands)
 3. (Will be added later) Web app
 
 ### 🤖 Telegram bot
 *Currently not always running! Want to test it? Let me know, I'll run the server for you*
+Bot name: @mesrop_translit_bot
 
 The bot can turn Latin text to Armenian: just start it and send your input – it'll respond with the same text in Armenian. Just start the bot (/start) and start sending text written in Latin characters – the bot will send you back the same text written in Armenian characters.
 
