@@ -11,7 +11,8 @@ import {
 	type TLessonCharacters,
 	type TLessonDifficulty,
 } from "../../shared/data/lessons.ts";
-import { transliterate } from "../../shared/scripts/transliterate.ts";
+import { transliterate } from "../../shared/scripts/transliterate/transliterate.ts";
+import { transliterateFromArm } from "../../shared/scripts/transliterate/transliterateFromArm.ts";
 import type { MyContext } from "../context.ts";
 
 export async function lessonConversation(
@@ -42,16 +43,19 @@ export async function lessonConversation(
 		const userResponse = answerCtx.message.text;
 		const isCorrect = transliterate(userResponse) === question;
 		if (isCorrect) correct++;
-		// TODO: show the correct value for the incorrect response – you'll need an Armenian-first table for that
-		await answerCtx.reply(isCorrect ? "✅ Correct!" : "😭 Incorrect!");
+		await answerCtx.reply(
+			isCorrect
+				? "✅ Correct!"
+				: `😭 Incorrect! It must be "${transliterateFromArm(question)}".`,
+		);
 	}
 	await ctx.reply(
 		[
 			`${determineResultMessage(correct, MAX_QUESTIONS_DEFAULT)}`,
 			`You got ${correct}/${MAX_QUESTIONS_DEFAULT} right.`,
 			"",
-			"Want another quiz? Run /practice again",
-			"Just want to turn Latin letters into Armenian? Simply start messaging",
+			"Want another quiz? Run /practice again.",
+			"Just want to transliterate a text? Simply send it in Latin or Armenian letters.",
 		].join("\n"),
 	);
 }

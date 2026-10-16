@@ -1,5 +1,7 @@
 import { createInterface } from "node:readline";
-import { transliterate } from "../shared/scripts/transliterate.ts";
+import { handleTransliteration } from "../shared/scripts/transliterate/handleTransliteration.ts";
+import { ERROR_MESSAGE_UNKNOWN_SCRIPT } from "./messages.ts";
+import { printResult } from "./printResult.ts";
 
 export function runInteractive(): void {
 	const rl = createInterface({
@@ -9,7 +11,7 @@ export function runInteractive(): void {
 	});
 
 	console.log(
-		"Interactive mode. Type text to transliterate. To quit type /q or /quit.",
+		"Interactive mode. Type Latin or Armenian text to transliterate. To quit type /q or /quit.",
 	);
 	rl.prompt();
 
@@ -23,7 +25,12 @@ export function runInteractive(): void {
 			rl.prompt();
 			return;
 		}
-		console.log(transliterate(trimmed));
+		const result = handleTransliteration(trimmed);
+		if (!result.ok) {
+			console.error(ERROR_MESSAGE_UNKNOWN_SCRIPT);
+		} else {
+			printResult(result);
+		}
 		rl.prompt();
 	});
 

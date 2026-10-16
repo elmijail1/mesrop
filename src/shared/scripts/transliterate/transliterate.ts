@@ -2,50 +2,67 @@ import {
 	alphabetMap,
 	specialInitChars,
 	type TTranslitNode,
-} from "../data/tables.ts";
+	type TTranslitTable,
+} from "../../data/tables.ts";
+import { capitalize, isInitChar } from "./utils.ts";
 
 const SPECIAL_INIT_CHAR_KEYS = Object.keys(specialInitChars);
-const DIVIDER_CHARS = ["-", " ", "/", "(", '"', "“", "«", "–", "—"];
 
 export function transliterate(sub: string): string {
-	const armSub: string[] = [];
-
+	const finalArr: string[] = [];
 	const trimmedSub = sub.trim();
 
 	for (let i = 0; i < trimmedSub.length; i++) {
-		const latCh = trimmedSub[i];
-		const latChLow = latCh.toLowerCase();
-		const isUpper = latCh !== latChLow;
+		const char = trimmedSub[i];
+		const charLow = char.toLowerCase();
+		const isUpper = char !== charLow;
 
-		if (!alphabetMap[latChLow]) {
-			armSub.push(latCh);
+		if (!alphabetMap[charLow]) {
+			finalArr.push(char);
 			continue;
 		}
 
-		if (
-			isInitChar(trimmedSub, i) &&
-			SPECIAL_INIT_CHAR_KEYS.includes(latChLow)
-		) {
-			const entry = specialInitChars[latChLow];
-			const resEntry = resolveEntry(entry, latChLow, trimmedSub, i, isUpper);
-			if (!resEntry) {
-				throw new Error("Match not found");
-			}
-			armSub.push(isUpper ? resEntry.value.toUpperCase() : resEntry.value);
+		if (isInitChar(trimmedSub, i) && SPECIAL_INIT_CHAR_KEYS.includes(charLow)) {
+			const resEntry = matchAndPushArmChar(
+				specialInitChars,
+				charLow,
+				trimmedSub,
+				i,
+				finalArr,
+				isUpper,
+			);
 			i = i + resEntry.length - 1;
 			continue;
 		}
-
-		const entry = alphabetMap[latChLow];
-		const resEntry = resolveEntry(entry, latChLow, trimmedSub, i, isUpper);
-		if (!resEntry) {
-			throw new Error("Match not found");
-		}
-		armSub.push(isUpper ? resEntry.value.toUpperCase() : resEntry.value);
+		const resEntry = matchAndPushArmChar(
+			alphabetMap,
+			charLow,
+			trimmedSub,
+			i,
+			finalArr,
+			isUpper,
+		);
 		i = i + resEntry.length - 1;
 	}
 
-	return armSub.join("");
+	return finalArr.join("");
+}
+
+function matchAndPushArmChar(
+	map: TTranslitTable,
+	char: string,
+	sub: string,
+	ind: number,
+	finalArr: string[],
+	isUpper: boolean,
+): { value: string; length: number } {
+	const entry = map[char];
+	const resEntry = resolveEntry(entry, char, sub, ind, isUpper);
+	if (!resEntry) {
+		throw new Error("Match not found");
+	}
+	finalArr.push(isUpper ? capitalize(resEntry.value) : resEntry.value);
+	return resEntry;
 }
 
 function resolveEntry(
@@ -80,15 +97,4 @@ function resolveEntry(
 	// further matching is impossible, fall back to the base entry at this level
 	const base = node[char];
 	return typeof base === "string" ? { value: base, length: char.length } : null;
-}
-
-function isInitChar(sub: string, ind: number): boolean {
-	if (ind === 0) return true;
-	if (
-		DIVIDER_CHARS.includes(sub[ind - 1]) ||
-		(sub[ind - 1] === "'" && DIVIDER_CHARS.includes(sub[ind - 2]))
-	) {
-		return true;
-	}
-	return false;
 }

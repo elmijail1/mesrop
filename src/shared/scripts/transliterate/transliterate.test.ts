@@ -3,7 +3,7 @@ import {
 	alphabetMap,
 	specialInitChars,
 	type TTranslitNode,
-} from "../data/tables.ts";
+} from "../../data/tables.ts";
 import { transliterate } from "./transliterate.ts";
 
 type TCase = { input: string; expected: string };
@@ -38,6 +38,11 @@ describe("transliterate", () => {
 		expect(transliterate("yEghiShe cH'arenTs'")).toBe("եղիՇե չարենՑ");
 	});
 
+	it("keeps the upper case only for the first letter of a multi-letter output", () => {
+		expect(transliterate("Ur Uzum")).toBe("Ուր Ուզում");
+		expect(transliterate("UR UZUM")).toBe("ՈւՐ ՈւԶՈւՄ");
+	});
+
 	it("handles special initial letters correctly", () => {
 		expect(
 			transliterate("Opop Ekek Ehsehk Vorvon Vervu Yuzyu Yerye Yevyev"),
@@ -53,9 +58,6 @@ describe("transliterate", () => {
 				"Ahbach Ac' Dodzev Errehgh Khoxk' Pip' Phushtheph Tsit'zahzh",
 			),
 		).toBe("Ըբաճ Աց Դոձև Էռէղ Խոխք Պիփ Փուշթեփ Ծիթզըժ");
-		expect(transliterate("Vovo-vovo 'vovo'")).toBe("Ովո-ովո 'ովո'");
-		expect(transliterate("Yeye (yevye—ye)")).toBe("Եյե (ևյե—ե)");
-		expect(transliterate('Oz/oz "oz–oz" «oz')).toBe('Օզ/օզ "օզ–օզ" «օզ');
 	});
 
 	it("handles trigraphs correctly", () => {
@@ -67,7 +69,15 @@ describe("transliterate", () => {
 	});
 
 	it("handles divider characters properly", () => {
-		expect(transliterate("Beboп_ Ятагаn!")).toBe("Բեբոп_ Ятагаն!");
+		expect(transliterate("Vovo-vovo 'vovo'")).toBe("Ովո-ովո 'ովո'");
+		expect(transliterate("Yeye (yevye—ye)")).toBe("Եյե (ևյե—ե)");
+		expect(transliterate('Oz/oz "oz–oz" «oz “oz')).toBe(
+			'Օզ/օզ "օզ–օզ" «օզ “օզ',
+		);
+	});
+
+	it("doesn't treat a letter after a non-divider character as initial", () => {
+		expect(transliterate("1oz _oz")).toBe("1ոզ _ոզ");
 	});
 });
 

@@ -1,4 +1,15 @@
-import type { TFlattenedMap } from "../../shared/scripts/flattenTable.ts";
+import { MAX_INPUT_LENGTH } from "../../shared/configs/transliteration.ts";
+import type { TFlattenedMap } from "../../shared/scripts/tableTransforms.ts";
+import type { TTranslitSuccess } from "../../shared/scripts/transliterate/handleTransliteration.ts";
+import { BOT_COMMANDS } from "../commands.ts";
+import { WARNING_MESSAGE_TRUNCATED } from "../messages.ts";
+
+export function formatTransliteration(result: TTranslitSuccess): string {
+	if (result.truncated) {
+		return `${result.text}…\n\n${WARNING_MESSAGE_TRUNCATED}`;
+	}
+	return result.text;
+}
 
 export function formatTable(table: TFlattenedMap): string {
 	const lines = Object.entries(table).map(([lat, arm]) => {
@@ -21,15 +32,14 @@ export function formatTable(table: TFlattenedMap): string {
 
 export function formatHelp(): string {
 	return [
-		"<b>🇦🇲 Mesrop – Turn Latin text to Armenian</b>",
-		"This bot turns your text in Latin letters to Armenian letters:",
-		'- Type text in Latin letters: for example, "koko"',
-		'- Get the same text in Armenian letters: "koko" → "կոկո"',
-		"- You don't need any command to do that – just send your text as a regular message",
+		"<b>🇦🇲 Mesrop – Turn Latin text to Armenian and back</b>",
+		"This bot turns your text in Latin letters to Armenian letters and the other way round:",
+		'- Send text in Latin letters: "koko" → "կոկո"',
+		'- Send text in Armenian letters: "կոկո" → "koko"',
+		"- You don't need any command to do that – just send your text as a regular message, the bot detects the direction by itself",
+		`- Up to ${MAX_INPUT_LENGTH} characters per message`,
 		"",
 		"<b>ℹ️ Extra Commands</b>",
-		"/practice – learn to read and write Armenian letters",
-		"/table - view a table that shows how Latin and Armenian letters match",
-		"/help – show help",
+		...BOT_COMMANDS.map((c) => `- /${c.command} – ${c.description}`),
 	].join("\n");
 }
